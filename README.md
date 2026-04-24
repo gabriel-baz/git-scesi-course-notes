@@ -1,6 +1,6 @@
 # Trabajo Individual
 
-**Nombre:** Gabriel Bazualdo Rojas  
+**Nombre:** Gabriel Bazualdo Rojas
 **Correo:** bazualdogabriel@gmail.com 
 
 ## Clase 1
@@ -147,4 +147,120 @@ prefijo: Titulo de tu commit
 Cuerpo que describe tu commit
 ```
 ---
+## Clase 3
+### ¿Qué es GitHub?
+GitHub es una plataforma en la nube que funciona como una red social 
+para desarrolladores.
+Permite alojar repositorios y trabajar en equipo usando Git.
+### Git vs GitHub
+- **Git:** sistema de control de versiones que guarda los cambios (commits).
+- **GitHub:** plataforma donde se suben esos cambios para compartirlos.
+### SSH vs HTTPS
+Cuando trabajamos con repositorios remotos, podemos usar:
+- HTTPS:
+	- Pide autenticación constantemente (usuario o token)
+	- Es más incómodo
+- SSH:
+	- Usa una clave para autenticarse
+	- No pide contraseña cada vez
+	- Es más práctico
 
+> Por eso se recomienda usar SSH.
+### Configuración de SSH
+Para configurar SSH:
+1. Generar una clave:
+``` ssh-keygen -t ed25519 -C "tu-correo@email.com" ```
+
+2. Ver la clave pública:
+``` cat ~/.ssh/id_ed25519.pub ```
+
+3. Copiar la clave y agregarla en GitHub:
+- Ir a Settings
+- SSH and GPG Keys
+- New SSH Key
+- Pegar la clave
+4. Verificar conexión:
+```ssh -T git@github.com```
+
+### Crear un repositorio en GitHub
+Pasos:
+1. Ir a GitHub
+2. Ir a repositorios
+3. Click en “New”
+4. Colocar nombre y crear repositorio
+### Conectar un repositorio local de Git existente con uno de GitHub
+```
+git remote add origin git@github.com:TuUser/TuRepo.git
+git branch -M main
+git push -u origin main
+```
+Esto conecta el repositorio local con el remoto.
+### Clonar un repositorio
+```
+git clone git@github.com:TuUser/TuRepo.git
+```
+
+Si se usó HTTPS por accidente: 
+```
+git remote set-url origin git@github.com:TuUser/TuRepo.git
+```
+
+Para ver la conexión remota:
+```
+git remote -v
+```
+### Subir y bajar cambios
+Subir cambios:
+```
+git push origin main
+```
+Bajar cambios:
+```
+git pull origin main
+```
+---
+## Clase 4
+### Remote
+Es la conexión a un repositorio en internet. Por defecto, se llama origin.
+
+### SSH
+Protocolo de conexión segura que usa llaves (pública y privada) para no tener 
+que escribir la contraseña.
+
+###Múltiples Remotos
+Un repositorio local puede conectarse a varios remotos a la vez.
+Checkout
+
+Comando para cambiar de rama y trabajar en local antes de subir los cambios.
+### Git Remote
+
+Comando para administrar las conexiones remotas.
+
+`git remote -v`   : Ver las conexiones.
+
+`git remote add <nombre> <url>`  : Añadir una nueva conexión.
+
+`git remote remove <nombre>`   : Quitar una conexión.
+
+### Subir Cambios (git push)
+
+Envía los commits locales al repositorio remoto.
+bash
+
+`git push <remoto> <rama>`
+
+### Bajar Cambios (git pull)
+
+Trae los cambios del repositorio remoto al local.
+bash
+
+`git pull <remoto> <rama>`
+
+### Clonar un Repositorio (git clone)
+
+Descarga una copia completa de un repositorio remoto existente.
+bash
+
+`git clone <url-del-remoto>`
+
+---
