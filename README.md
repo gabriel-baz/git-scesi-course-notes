@@ -383,4 +383,71 @@ crear una solución desde `develop` porque esta contiene cambios que pueden ser 
 | `hotfix/*` | `main` | `main` y `develop` | Arreglar un incendio en producción. |
 
 ---
+## Clase 6
+### El Flujo de Trabajo Esencial en Equipo
 
+> Antes de fusionar tus cambios o empezar a trabajar, es ** muy importante** sincronizar tu repositorio 
+> local con el remoto para tener las últimas actualizaciones.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git checkout develop` | Moverse a la rama principal de desarrollo. |
+| `git fetch` | Revisa y te informa si hay cambios nuevos en el repositorio remoto _sin traerlos todavía_. Es como "mirar" qué han hecho los demás. |
+| `git pull origin develop`| Trae (descarga) todos los cambios que existen en la rama `develop` del repositorio remoto a tu máquina local. |
+
+### Fusión de Ramas (Merge)
+#### ¿Qué es git merge?
+Merge significa fusionar, con git merge podemos juntar los cambios de una rama que 
+creamos (ej. `feature/nueva-funcionalidad`) en otra (ej. `develop`).
+
+#### Caso 1: Fusión Ideal (Sin Conflictos)
+
+Este es el mejor escenario donde los cambios de tu rama no chocan con los cambios en `develop`.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git merge --no-ff <nombre-de-tu-rama>` | Fusiona tu rama en `develop`. La opción `--no-ff` (no fast-forward) es clave porque crea un "commit de fusión", lo que mantiene un historial claro y visible de que existió una rama y fue unida. |
+| `git log --graph --oneline` | Permite visualizar el historial de commits y ramas de una forma gráfica y compacta. |
+| `git branch -D <nombre-de-tu-rama>` | Una vez que la rama ha sido fusionada y ya no se necesita, se elimina para mantener limpio el repositorio. ~~Ya no sirve~~. |
+
+### Caso 2: Fusión con Conflictos
+Ocurre cuando dos personas modifican las mismas líneas en el mismo archivo. Git no sabe qué cambio 
+conservar y te pide que lo resuelvas manualmente.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git merge <nombre-de-tu-rama>` | Al ejecutarlo, Git te avisará que hay un conflicto y en qué archivos. |
+| _(Resolución Manual)_ | Debes abrir los archivos con conflictos. Verás marcadores `<<<<<<< HEAD`, `=======`, y `>>>>>>>`. Tienes que editar el código para decidir qué cambios se quedan y borrar esos marcadores. |
+| `git status` | Te muestra los archivos que estaban en conflicto. |
+| `git add <archivos-solucionados>` | Después de resolver manualmente, agregas los archivos al _"staging area"_ para marcar que ya están solucionados. |
+| `git commit` | Ejecutas el commit **sin un mensaje**. Git automáticamente creará el commit de fusión que finaliza el proceso. |
+
+### Caso 3: Evitar Conflictos en `develop`(El Método Recomendado)
+
+La mejor práctica es resolver los conflictos en tu propia rama antes de intentar fusionarla con 
+`develop`. Esto mantiene la rama `develop` mucho más limpia y estable.
+
+1. **Actualiza `develop`**:
+    * `git checkout develop`
+    * `git fetch` y `git pull origin develop`
+
+2. **Vuelve a tu rama y trae los cambios de `develop` a ella**:
+    * `git checkout <nombre-de-tu-rama>`
+    * `git merge develop`
+
+3. **Resuelve los conflictos localmente** : Si hay conflictos, ocurrirán aquí, en tu rama. 
+Los resuelves siguiendo los pasos del **Caso 2**.
+
+4. **Fusiona tu rama limpia en `develop`**:
+    * `git checkout develop`
+    * `git merge --no-ff <nombre-de-tu-rama>` (Esta vez, no debería haber conflictos).
+
+### Comandos Adicionales Mencionados
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git push -u origin <nombre-rama>` | Se usa la primera vez que subes una rama al repositorio remoto. La `-u` establece una conexión entre tu rama local y la remota. |
+| `git checkout -b <nombre-rama>` | Crea una nueva rama y se mueve a ella en un solo paso. |
+| `git switch -c <nombre-rama>` | Una alternativa más moderna a `git checkout -b`. |
+
+---
