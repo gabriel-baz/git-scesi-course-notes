@@ -1,3 +1,5 @@
+
+
 # Trabajo Individual
 
 **Nombre:** Gabriel Bazualdo Rojas
@@ -264,3 +266,121 @@ bash
 `git clone <url-del-remoto>`
 
 ---
+## Clase 5
+
+### RAMAS Y GITFLOW BÁSICO
+La base del trabajo remoto en equipo con GIT.
+
+### ¿QUÉ SON LAS RAMAS?
+Son como clones de tu proyecto.Se trata de una 
+**bifurcación del estado del código que crea un nuevo camino** , creas 
+una rama para trabajar en algo nuevo (una nueva función, un arreglo) 
+sin miedo a romper el código principal. Es como tener un borrador aparte.
+
+### GIT BRANCH
+`git branch` es un comando que nos permite gestionar las ramas que tiene o 
+tendrá nuestro proyecto.
+
+*   **`git branch`**
+    *   Nos permite listar las ramas disponibles y nos muestra el 
+posicionamiento actual de nuestro HEAD.
+
+*   **`git branch <rama>`**
+    *   Crea una rama a partir de la rama que estamos posicionados.
+
+*   **`git branch -D <rama>`**
+    *   Borra la rama.
+
+### GIT CHECKOUT ENFOCADO EN RAMAS
+Si bien `git checkout` lo usamos previamente para ver nuestros archivos 
+pasados mediante los commits, también puede ser usado junto con las ramas para:
+
+*   **`git checkout <rama>`**
+    *   Permite cambiar de ramas.
+    *   *Importante:* No debemos tener nada en estado `modified`, `untracked` 
+o `staged` para poder usarlo.
+
+*   **`git checkout -b <rama>`**
+    *   Crea una nueva rama y se mueve a ella directamente en un solo paso.
+
+### GIT CHECKOUT VS. GIT SWITCH
+#### ¿Por qué existen ambos?
+Antes, `git checkout` hacía muchas cosas (cambiar ramas, ir a commits, 
+restaurar archivos), lo que podía causar errores.  
+Desde Git 2.23 se creó `git switch` para enfocarse solo en ramas y hacerlo 
+más seguro.
+
+*   **`git checkout`** : comando antiguo y multipropósito, pero puede causar 
+errores como *Detached HEAD*.
+*   **`git switch`**: comando moderno, solo para ramas, más claro y recomendado.
+
+### GITFLOW BÁSICO
+#### ¿Qué es?
+Es un **flujo de trabajo (workflow)** que organiza el uso de ramas para 
+trabajar en equipo de forma ordenada.
+
+*   **Sin Gitflow:** El trabajo puede ser desordenado y muy poco entendible.
+*   **Con Gitflow:** El flujo es más ordenado y visualmente entendible.
+
+### ¿CÓMO FUNCIONA GITFLOW?
+Gitflow organiza el repositorio en diferentes tipos de ramas.
+
+*   **`main`**
+    *   Su propósito es contener el código que se encuentra en **producción**.
+Es la versión estable y funcional que ven los usuarios. 
+
+*   **`develop`**
+    *   Es la rama de **“pre-producción”**. Su propósito es tener las 
+características que se están probando y que aún no han sido validadas del todo.
+
+*   **Ramas de apoyo**
+    *   Son ramas temporales que nos permitirán escribir nuestro código y 
+pueden ser de tipo `feature`, `release` y `hotfix`.
+
+### RAMAS DE APOYO
+
+*   ### `feature`
+    *   **Propósito:** Se usa cuando trabajas en una nueva característica 
+para el proyecto.
+    *   **Flujo:** Estas ramas se crean a partir de la rama `develop` y, una 
+vez finalizan, son fusionadas de nuevo en `develop` y eliminadas.
+    *   **Ejemplo de cómo nombrarla:**
+        ```
+        feature/sum-function
+        feature/add-search-bar
+        feature/new-form-user
+        ```
+
+*   ### `release`
+    *   **Propósito:** Se usa cuando preparas el lanzamiento de una nueva 
+versión del producto. Es en teoría donde se hacen pruebas de calidad (QA).
+    *   **Flujo:** Se crean desde `develop` y se fusionan en `develop` y 
+en `main` una vez que la versión está lista para ser lanzada.
+    *   **Ejemplo de cómo nombrarla:**
+        ```
+        release/v1.0.0
+        release/v2.1.0-beta
+        ```
+
+*   ### `hotfix`
+    *   **Propósito:** Para trabajar en cambios imprevistos como parches para 
+arreglar un bug o un problema urgente en producción.
+    *   **Flujo:** Se debe crear desde la rama `main`, ya que no se podría 
+crear una solución desde `develop` porque esta contiene cambios que pueden ser inestables. Nacen de `main` y se fusionan con `main` y también con `develop` para que la corrección esté disponible en futuros desarrollos.
+    *   **Ejemplo de cómo nombrarla:**
+        ```
+        hotfix/login-authentication-error
+        hotfix/fix-database-connection-leak
+        hotfix/security-patch-v1.0.2
+        ```
+
+### EN RESUMEN...
+| Rama | Nace de... | Muere en... | Propósito |
+|:---|:---|:---|:---|
+| `develop` | `main` | Jamás (es eterna) | El día a día del equipo. |
+| `feature/*` | `develop` | `develop` | Una tarea específica. |
+| `release/*` | `develop` | `main` y `develop` | Pulir la versión final. |
+| `hotfix/*` | `main` | `main` y `develop` | Arreglar un incendio en producción. |
+
+---
+
