@@ -538,4 +538,65 @@ Después de que tu Pull Request sea fusionado en `develop`:
 	`git push origin --delete feature/nombre-de-tu-funcionalidad`
 
 ---
+## Clase 8
+### Gestión de Múltiples Pull Requests y Conflictos
 
+Un tema central de la clase fue entender qué sucede cuando hay varios 
+Pull Requests abiertos que modifican los mismos archivos.
+
+1.  **Escenario**: Dos o más personas abren Pull Requests (PRs) que tocan las mismas líneas del mismo archivo (ej. `README.md`).
+2.  **Fusión del Primer PR**: El primer PR que consigue las aprobaciones necesarias y se fusiona, lo hace sin problemas.
+3.  **Conflicto en el Segundo PR**: Inmediatamente después de que el primer PR se fusiona, GitHub detecta que el segundo PR ahora tiene **conflictos de fusión** (`merge conflicts`) con la rama `develop`.
+4.  **Notificación**: GitHub avisa sobre este conflicto en la interfaz del PR, impidiendo su fusión directa.
+5.  **Solución para el Desarrollador Afectado**:
+    *   Actualizar la rama `develop` local:
+        ```bash
+        git checkout develop
+        git pull origin develop
+        ```
+    *   Regresar a su rama de trabajo (`feature/...`).
+    *   Fusionar `develop` en su rama para traer los conflictos a su entorno local:
+        ```bash
+        git merge develop
+        ```
+    *   Resolver los conflictos (ver siguiente sección).
+    *   Hacer un nuevo _commit_ con la resolución y hacer `push` a su rama. Esto actualizará el PR y permitirá un nuevo ciclo de revisión.
+
+### Comandos Útiles Adicionales
+
+Se presentaron dos grupos de comandos para gestionar cambios temporales 
+y visualizar diferencias.
+
+#### `git stash`: El Alijo Temporal
+
+Permite guardar temporalmente los cambios que aún no están listos para 
+ser "commiteados", dejando el directorio de trabajo limpio para poder 
+cambiar de rama.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git stash -m "mensaje"` | Guarda los cambios actuales en un "alijo" con un mensaje descriptivo para identificarlos. |
+| `git stash list` | Muestra la lista de todos los "alijos" que se han guardado. |
+| `git stash pop` | Aplica el último cambio guardado en el "alijo" y lo elimina de la lista. |
+| `git restore --staged .` | Saca todos los archivos del área de _staging_, revirtiendo un `git add .` para poder hacer _commits_ más específicos. |
+
+#### `git diff`: El Detector de Diferencias
+
+Muestra las diferencias entre _commits_, ramas o el estado actual de los archivos.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `git diff <archivo>` | Muestra los cambios en un archivo que _aún no han sido añadidos_ al _staging_. |
+| `git diff --staged <archivo>` | Muestra los cambios en un archivo que **ya están en _staging_** (después de `git add`). |
+| `git diff <rama1> <rama2>` | Muestra todas las diferencias que existen entre dos ramas. |
+
+### Buena Práctica: Borrar la Rama Post-Merge
+
+> Una vez que un Pull Request ha sido exitosamente fusionado, es una excelente práctica mantener el repositorio limpio.
+
+GitHub muestra un botón para **`Delete branch`** justo después de la fusión. 
+Es altamente recomendable usarlo para eliminar la rama de característica que 
+ya no se necesita.
+
+![Logo de Git](https://git-scm.com/images/logos/downloads/Git-Logo-2Color.png)
+---
