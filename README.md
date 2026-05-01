@@ -2,7 +2,7 @@
 
 # Trabajo Individual
 
-**Nombre:** Gabriel Bazualdo Rojas
+**Nombre:** Gabriel Bazualdo Rojas  
 **Correo:** bazualdogabriel@gmail.com 
 
 ## Clase 1
@@ -451,3 +451,91 @@ Los resuelves siguiendo los pasos del **Caso 2**.
 | `git switch -c <nombre-rama>` | Una alternativa más moderna a `git checkout -b`. |
 
 ---
+## Clase 7
+### Flujo de Trabajo con Pull Requests (PR)
+
+El uso de **Pull Requests** introduce un proceso formal para la revisión y 
+fusión de cambios, alertando a otros compañeros sobre las modificaciones 
+propuestas y permitiendo la aprobación o solicitud de cambios antes de 
+la integración final.
+
+### 1. Configuración del Repositorio (Solo el *Host* o Administrador)
+Es necesario establecer reglas en las ramas principales para forzar el uso 
+de Pull Requests.
+
+*   **Acción**: Ir a **Settings** > **Branches** en GitHub.
+*   **Paso**: Añadir un **Rule Set** (conjunto de reglas) a las ramas `main` (o `master`) y `develop`.
+*   **Regla Clave**: Activar `Require a pull request before merging`.
+    *   **Configuración**: Especificar el **número de aprobaciones** necesarias (ej. `3` para un equipo de 4, implicando que *la mitad más uno* debe aprobar).
+    *   **Regla Adicional**: Activar `Dismiss stale pull request approvals when new commits are pushed` para forzar una nueva revisión si se añaden _commits_ después de una aprobación.
+
+### 2. Flujo de Trabajo del Desarrollador (Colaborador)
+
+Los desarrolladores siguen un flujo similar al trabajo en grupo sin PRs, pero la fusión final es diferente.
+
+1.  **Sincronización inicial**: Asegúrate de tener la última versión de 
+`develop` en tu máquina local.
+    ```
+    git checkout develop
+    git fetch
+    git pull origin develop
+    ```
+2.  **Crear y trabajar en tu rama de característica**:
+
+```
+git switch -c feature/nombre-de-tu-funcionalidad
+```
+o 
+```
+git checkout -b feature/nombre-de-tu-funcionalidad
+```
+
+> Luego realiza tus cambios y commits en esta rama
+
+3.  **Subir tu rama al repositorio remoto**:
+    ```
+    git push -u origin feature/nombre-de-tu-funcionalidad
+    ```
+>   Usar -u la primera vez
+
+4.  **Abrir un Pull Request**:
+    *   Ve a GitHub. Después de hacer _push_ a una nueva rama, suele aparecer un botón para "Compare & pull request".
+    *   **Rama Base**: `develop` (a donde quieres _mergear_).
+    *   **Rama a _Mergear_**: `feature/nombre-de-tu-funcionalidad` (tu rama de trabajo).
+    *   **Título y Descripción**: Escribe un título y una descripción *descriptivos* de los cambios. Puedes usar Markdown en la descripción.
+        *   _Recomendación_: Realiza `git merge develop` en tu rama local antes de crear el PR para resolver conflictos temprano y presentarlo "limpio".
+5.  **Proceso de Revisión y Aprobación**:
+    *   Otros miembros del equipo revisarán tu código en el PR.
+    *   Pueden dejar **comentarios** en líneas específicas o en general.
+    *   Pueden **aprobar** (`Approve`), **rechazar/solicitar cambios** (`Request changes`), o simplemente dejar **comentarios** (`Comment`).
+    *   Si se solicitan cambios (`Request changes`), el PR no podrá ser fusionado hasta que los cambios sean implementados y el revisor cambie su estado a `Approve`.
+    *   Si se añaden nuevos _commits_ a la rama del PR después de una aprobación, las aprobaciones anteriores se *descartarán* (si se configuró esa regla), requiriendo una nueva revisión.
+6.  **Fusionar el Pull Request**:
+    *   Una vez que se cumpla el número de aprobaciones requeridas y no haya solicitudes de cambios pendientes, el PR puede ser fusionado.
+    *   El **título del PR** se usa como mensaje del _commit_ de fusión por defecto.
+    *   Cualquier miembro del equipo con permiso puede hacer clic en "Confirm merge".
+
+---
+
+### Comandos Finales (Post-Merge)
+
+Después de que tu Pull Request sea fusionado en `develop`:
+
+1.  **Actualiza tu repositorio local**:
+    ```
+    git checkout develop
+    git fetch
+    git pull origin develop
+    ```
+2.  **Elimina tu rama de característica (local y remoto si aplica)**:
+
+	Elimina localmente
+
+	`git branch -D feature/nombre-de-tu-funcionalidad`
+
+	Elimina remotamente (opcional, si tienes permisos)
+
+	`git push origin --delete feature/nombre-de-tu-funcionalidad`
+
+---
+
